@@ -1,10 +1,10 @@
- type memes = {
+ export type Meme = {
   id: number;
   name: string;
   image: string;
   likes: number;
 }
- export const  memes: memes[] = [
+ export const  memes: Meme[] = [
   { id: 1, name: "Distracted Boyfriend", image: "https://i.imgflip.com/1bij.jpg", likes: 42 },
   { id: 2, name: "Drake Hotline Bling", image: "https://i.imgflip.com/30b1gx.jpg", likes: 35 },
   { id: 3, name: "Two Buttons", image: "https://i.imgflip.com/1g8my4.jpg", likes: 28 },

@@ -5,6 +5,7 @@ export async function GET() {
   if (!memes) {
     return NextResponse.json({ error: "Meme not found" }, { status: 404 });
   }
+  
 
   return NextResponse.json(memes);
 }

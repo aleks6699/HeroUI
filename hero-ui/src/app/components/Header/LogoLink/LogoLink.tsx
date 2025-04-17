@@ -1,5 +1,6 @@
 import Image from "next/image";
 import NavLink from "next/link";
+
 export function LogoLink() {
   return (
     <NavLink href="/" className="text-lg font-semibold hover:text-gray-300 hover:scale-105 flex items-center transition">

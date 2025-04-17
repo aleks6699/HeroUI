@@ -7,7 +7,7 @@ import { NavBarItemLink } from "./NavBarItem/NavBarItem";
 
 export function Header() {
   return (
-    <Navbar position="sticky" className="bg-gray-800 text-white">
+    <Navbar  className="bg-gray-800 text-white fixed">
       <div className="w-full flex justify-around items-center p-4">
         <NavbarBrand>
           <LogoLink />
