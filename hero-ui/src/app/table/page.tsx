@@ -6,6 +6,7 @@ import { Loading } from "../components/Loading/Loading";
 import Link from "next/link";
 import { useEditMeme } from "../hooks/useEditMeme";
 import { MemeModal } from "../components/Modal/MemoModal";
+import { Meme } from "../dataBase/db";
 const columns = [
   { id: "id", label: "ID" },
   { id: "name", label: "Name" },
@@ -14,19 +15,41 @@ const columns = [
   { id: "edit", label: "Edit" },
 ];
 
+
 export default function TablePage() {
-  const { memes, setMemes, loading, error } = useFetchMemes();
-  const { isModalOpen, currentMeme, handleEditClick, handleSave, closeModal, errors } = useEditMeme(memes, setMemes);
+  const { memes, loading, error,  updateMeme } = useFetchMemes();
+  const { 
+    isModalOpen, 
+    currentMeme, 
+    handleEditClick, 
+    handleSave, 
+    closeModal, 
+    errors,
+    isSaving
+  } = useEditMeme();
+
+  const handleSaveWithAPI = async (updatedMeme: Meme) => {
+    return handleSave(updatedMeme, async () => {
+      const success = await updateMeme(updatedMeme);
+      if (success) {
+        closeModal();
+      }
+      return success;
+    });
+  };
 
   if (loading) return <Loading />;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div className="text-red-500 p-4">Error: {error}</div>;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-2 sm:p-4">
-      <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-800 mb-4 sm:mb-8 tracking-wide mt-25">Memes Table</h1>
+      <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-800 mb-4 sm:mb-8 tracking-wide mt-25">
+        Memes Table
+      </h1>
+      
       <div className="w-full flex justify-center">
         <div className="w-full max-w-6xl overflow-x-auto">
-          <Table className="min-w-[360px] w-full shadow-xl rounded-lg sm:rounded-2xl overflow-hidden bg-white mx-auto">
+        <Table className="min-w-[360px] w-full shadow-xl rounded-lg sm:rounded-2xl overflow-hidden bg-white mx-auto">
             <TableHeader>
               {columns.map((column) => (
                 <TableColumn 
@@ -69,7 +92,14 @@ export default function TablePage() {
         </div>
       </div>
 
-      <MemeModal isOpen={isModalOpen} onClose={closeModal} meme={currentMeme} onSave={handleSave} errors={errors} />
+      <MemeModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        meme={currentMeme} 
+        onSave={handleSaveWithAPI} 
+        errors={errors}
+        isSaving={isSaving}
+      />
     </div>
   );
 }

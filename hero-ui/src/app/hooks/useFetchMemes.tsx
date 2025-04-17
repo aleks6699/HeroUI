@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Meme } from "../dataBase/db";
 
-
 export function useFetchMemes() {
   const [memes, setMemes] = useState<Meme[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,9 +20,37 @@ export function useFetchMemes() {
     }
   };
 
+  const updateMeme = async (updatedMeme: Meme) => {
+    try {
+      const response = await fetch(`/api/memes/${updatedMeme.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMeme),
+      });
+
+      if (!response.ok) throw new Error("Failed to update meme");
+
+      setMemes(prev => 
+        prev.map(m => m.id === updatedMeme.id ? updatedMeme : m)
+      );
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Update failed");
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchMemes();
   }, []);
 
-  return { memes, setMemes, loading, error, refetch: fetchMemes };
+  return { 
+    memes, 
+    loading, 
+    error, 
+    refetch: fetchMemes,
+    updateMeme 
+  };
 }

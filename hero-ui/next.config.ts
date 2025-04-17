@@ -2,7 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['i.imgflip.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.imgflip.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

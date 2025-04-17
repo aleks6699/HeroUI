@@ -7,31 +7,27 @@ interface Meme {
   likes: number;
 }
 
-export function useEditMeme(memes: Meme[], setMemes: (memes: Meme[]) => void) {
+export function useEditMeme() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentMeme, setCurrentMeme] = useState<Meme | null>(null);
   const [errors, setErrors] = useState({
     name: '',
     image: ''
   });
+  const [isSaving, setIsSaving] = useState(false);
 
   const validate = (meme: Meme): boolean => {
-    let isValid = true;
-    const newErrors = { name: '', image: '' };
-
-    if (meme.name.length < 3 || meme.name.length > 100) {
-      newErrors.name = 'Name must be between 3 and 100 characters';
-      isValid = false;
-    }
-
-    const imageRegex = /\.(jpeg|jpg)$/i;
-    if (!imageRegex.test(meme.image)) {
-      newErrors.image = 'Image URL must end with .jpg or .jpeg';
-      isValid = false;
-    }
+    const newErrors = {
+      name: meme.name.length < 3 || meme.name.length > 100 
+        ? 'Name must be between 3 and 100 characters' 
+        : '',
+      image: !/\.(jpe?g|png|gif|webp)$/i.test(meme.image)
+        ? 'Image must be a valid URL (jpg, png, gif, webp)' 
+        : ''
+    };
 
     setErrors(newErrors);
-    return isValid;
+    return !newErrors.name && !newErrors.image;
   };
 
   const handleEditClick = (meme: Meme) => {
@@ -40,10 +36,14 @@ export function useEditMeme(memes: Meme[], setMemes: (memes: Meme[]) => void) {
     setIsModalOpen(true);
   };
 
-  const handleSave = (updatedMeme: Meme) => {
-    if (validate(updatedMeme)) {
-      setMemes(memes.map((m) => (m.id === updatedMeme.id ? updatedMeme : m)));
-      setIsModalOpen(false);
+  const handleSave = async (updatedMeme: Meme, onSuccess: () => void) => {
+    if (!validate(updatedMeme)) return false;
+    
+    setIsSaving(true);
+    try {
+      return await onSuccess();
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -51,6 +51,7 @@ export function useEditMeme(memes: Meme[], setMemes: (memes: Meme[]) => void) {
     isModalOpen,
     currentMeme,
     errors,
+    isSaving,
     handleEditClick,
     handleSave,
     closeModal: () => setIsModalOpen(false),
