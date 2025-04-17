@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useEditMeme } from "../hooks/useEditMeme";
 import { MemeModal } from "../components/Modal/MemoModal";
 
-
 const columns = [
   { id: "id", label: "ID" },
   { id: "name", label: "Name" },
@@ -18,13 +17,7 @@ const columns = [
 
 export default function TablePage() {
   const { memes, setMemes, loading, error } = useFetchMemes();
-  const {
-    isModalOpen,
-    currentMeme,
-    handleEditClick,
-    handleSave,
-    closeModal,
-  } = useEditMeme(memes, setMemes);
+  const { isModalOpen, currentMeme, handleEditClick, handleSave, closeModal, errors } = useEditMeme(memes, setMemes);
 
   if (loading) return <Loading />;
   if (error) return <div>Error: {error}</div>;
@@ -44,20 +37,24 @@ export default function TablePage() {
           {memes.map((meme) => (
             <TableRow key={meme.id} className="hover:bg-gray-50">
               <TableCell className="px-6 py-4">{meme.id}</TableCell>
-              <TableCell className="px-6 py-4 font-medium text-gray-800">{meme.name}</TableCell>
+              <TableCell className="px-6 py-4 font-medium text-gray-800 ">{meme.name}</TableCell>
               <TableCell className="px-6 py-4 text-blue-500 hover:underline break-all">
-                <Link href={meme.image} target="_blank">{meme.image}</Link>
+                <Link href={meme.image} target="_blank">
+                  {meme.image}
+                </Link>
               </TableCell>
               <TableCell className="px-6 py-4">{meme.likes}</TableCell>
               <TableCell className="px-6 py-4">
-                <Button className ="cursor-pointer hover:text-amber-500 transition-colors" onPress={() => handleEditClick(meme)}>Edit</Button>
+                <Button className="cursor-pointer hover:text-amber-500 transition-colors" onPress={() => handleEditClick(meme)}>
+                  ✏️
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      <MemeModal isOpen={isModalOpen} onClose={closeModal} meme={currentMeme} onSave={handleSave} />
+      <MemeModal isOpen={isModalOpen} onClose={closeModal} meme={currentMeme} onSave={handleSave} errors={errors} />
     </div>
   );
 }

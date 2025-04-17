@@ -13,9 +13,13 @@ type MemeModalProps = {
   onClose: () => void;
   meme: Meme | null;
   onSave: (meme: Meme) => void;
+  errors?: {
+    name?: string;
+    image?: string;
+  };
 };
 
-export const MemeModal = ({ isOpen, onClose, meme, onSave }: MemeModalProps) => {
+export const MemeModal = ({ isOpen, onClose, meme, onSave, errors }: MemeModalProps) => {
   const [formData, setFormData] = useState<Meme>({
     id: 0,
     name: "",
@@ -46,7 +50,9 @@ export const MemeModal = ({ isOpen, onClose, meme, onSave }: MemeModalProps) => 
         <ModalHeader className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">✏️ Edit Meme</ModalHeader>
         <ModalBody className="space-y-5">
           <InputField label="Name" name="name" value={formData.name} onChange={handleChange} />
+          {errors?.name && <p className="text-red-500 text-sm">{errors.name}</p>}
           <InputField label="Image URL" name="image" value={formData.image} onChange={handleChange} type="url" />
+          {errors?.image && <p className="text-red-500 text-sm">{errors.image}</p>}
           <InputField label="Likes" name="likes" value={String(formData.likes)} onChange={handleChange} type="number" min="0" />
         </ModalBody>
         <ModalFooter className="flex justify-end pt-4 border-t mt-6 gap-3">
