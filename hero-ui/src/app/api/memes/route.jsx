@@ -9,3 +9,11 @@ export async function GET() {
 
   return NextResponse.json(memes);
 }
+export async function POST(request) {
+  const { name, image } = await request.json();
+  if (!name || !image) {
+    return NextResponse.json({ error: "Meme not found" }, { status: 404 });
+  }
+  memes.push({ name, image });
+  return NextResponse.json(memes);
+}

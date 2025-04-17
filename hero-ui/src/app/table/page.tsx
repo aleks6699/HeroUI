@@ -6,7 +6,6 @@ import { Loading } from "../components/Loading/Loading";
 import Link from "next/link";
 import { useEditMeme } from "../hooks/useEditMeme";
 import { MemeModal } from "../components/Modal/MemoModal";
-
 const columns = [
   { id: "id", label: "ID" },
   { id: "name", label: "Name" },
@@ -23,36 +22,52 @@ export default function TablePage() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-4">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8 tracking-wide">Memes Table</h1>
-      <Table className="w-full max-w-4xl shadow-xl rounded-2xl overflow-hidden bg-white">
-        <TableHeader>
-          {columns.map((column) => (
-            <TableColumn key={column.id} className="text-left px-6 py-4 bg-gray-100 text-gray-700 font-semibold uppercase">
-              {column.label}
-            </TableColumn>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {memes.map((meme) => (
-            <TableRow key={meme.id} className="hover:bg-gray-50">
-              <TableCell className="px-6 py-4">{meme.id}</TableCell>
-              <TableCell className="px-6 py-4 font-medium text-gray-800 ">{meme.name}</TableCell>
-              <TableCell className="px-6 py-4 text-blue-500 hover:underline break-all">
-                <Link href={meme.image} target="_blank">
-                  {meme.image}
-                </Link>
-              </TableCell>
-              <TableCell className="px-6 py-4">{meme.likes}</TableCell>
-              <TableCell className="px-6 py-4">
-                <Button className="cursor-pointer hover:text-amber-500 transition-colors" onPress={() => handleEditClick(meme)}>
-                  ✏️
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-2 sm:p-4">
+      <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-800 mb-4 sm:mb-8 tracking-wide mt-25">Memes Table</h1>
+      <div className="w-full flex justify-center">
+        <div className="w-full max-w-6xl overflow-x-auto">
+          <Table className="min-w-[360px] w-full shadow-xl rounded-lg sm:rounded-2xl overflow-hidden bg-white mx-auto">
+            <TableHeader>
+              {columns.map((column) => (
+                <TableColumn 
+                  key={column.id} 
+                  className="text-left px-2 sm:px-4 py-2 sm:py-4 bg-gray-100 text-gray-700 text-xs sm:text-sm font-semibold uppercase"
+                >
+                  {column.label}
+                </TableColumn>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {memes.map((meme) => (
+                <TableRow key={meme.id} className="hover:bg-gray-50">
+                  <TableCell className="px-2 sm:px-4 py-2 sm:py-4 text-xs sm:text-base">
+                    {meme.id}
+                  </TableCell>
+                  <TableCell className="px-2 sm:px-4 py-2 sm:py-4 font-medium text-gray-800 text-xs sm:text-base">
+                    {meme.name}
+                  </TableCell>
+                  <TableCell className="px-2 sm:px-4 py-2 sm:py-4 text-blue-500 hover:underline break-all text-xs sm:text-base">
+                    <Link href={meme.image} target="_blank">
+                      {meme.image.length > 20 ? `${meme.image.substring(0, 15)}...` : meme.image}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="px-2 sm:px-4 py-2 sm:py-4 text-xs sm:text-base">
+                    {meme.likes}
+                  </TableCell>
+                  <TableCell className="px-2 sm:px-4 py-2 sm:py-4">
+                    <Button 
+                      className="cursor-pointer hover:text-amber-500 transition-colors text-xs sm:text-base"
+                      onPress={() => handleEditClick(meme)}
+                    >
+                      ✏️
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
 
       <MemeModal isOpen={isModalOpen} onClose={closeModal} meme={currentMeme} onSave={handleSave} errors={errors} />
     </div>

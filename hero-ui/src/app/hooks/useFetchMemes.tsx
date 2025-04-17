@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Meme } from "../dataBase/db";
 
+
 export function useFetchMemes() {
   const [memes, setMemes] = useState<Meme[]>([]);
   const [loading, setLoading] = useState(true);
