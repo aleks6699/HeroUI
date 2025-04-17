@@ -37,7 +37,7 @@ export default function MemesListPage() {
 
             <CardFooter className="flex justify-between items-center px-4 pb-4 text-sm text-gray-600">
               <span>
-                Likes: <span className="font-bold text-gray-800">{meme.likes}</span>
+                Likes: <span className="font-bold text-gray-800">{meme.likes}💖</span>
               </span>
               <a href={meme.image} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 font-medium">
                 View

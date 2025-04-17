@@ -12,6 +12,7 @@ type MemeModalProps = {
   errors?: {
     name?: string;
     image?: string;
+    likes?: string;
   };
   isSaving?: boolean;
 };
@@ -61,6 +62,7 @@ export const MemeModal = ({ isOpen, onClose, meme, onSave, errors, isSaving = fa
             min="0"
             isDisabled={isSaving}
           />
+          {errors?.likes && <p className="text-red-500 text-sm">{errors.likes}</p>}
         </ModalBody>
         <ModalFooter className="flex justify-end pt-4 border-t mt-6 gap-3">
           <Button onPress={onClose} className="bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-lg" isDisabled={isSaving}>

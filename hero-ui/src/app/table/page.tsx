@@ -75,7 +75,7 @@ export default function TablePage() {
                     </Link>
                   </TableCell>
                   <TableCell className="px-2 sm:px-4 py-2 sm:py-4 text-xs sm:text-base">
-                    {meme.likes}
+                  💖{meme.likes}
                   </TableCell>
                   <TableCell className="px-2 sm:px-4 py-2 sm:py-4">
                     <Button 

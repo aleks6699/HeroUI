@@ -57,6 +57,12 @@ export async function PUT(request: Request, props: { params: Promise<{ id: strin
         { status: 400 }
       );
     }
+    if (updateData.likes !== undefined && (updateData.likes < 1 || updateData.likes > 99)) {
+      return NextResponse.json(
+        { error: "Likes must be between 1 and 99" },
+        { status: 400 }
+      );
+    }
 
     if (updateData.image && !/\.(jpe?g|png|gif|webp)$/i.test(updateData.image)) {
       return NextResponse.json(
